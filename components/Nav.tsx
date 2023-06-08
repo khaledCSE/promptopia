@@ -2,13 +2,14 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { ClientSafeProvider, LiteralUnion, getProviders, signIn } from 'next-auth/react'
+import { ClientSafeProvider, LiteralUnion, getProviders, signIn, signOut } from 'next-auth/react'
 import { BuiltInProviderType } from "next-auth/providers"
 
 const Nav = () => {
   const isUserLoggedIn = true
 
   const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
+  const [toggleDropdown, setToggleDropdown] = useState(false)
 
   useEffect(() => {
     const getAuthProviders = async () => {
@@ -39,7 +40,7 @@ const Nav = () => {
             <button
               type="button"
               className="outline_btn"
-              onClick={() => { }}
+              onClick={() => signOut()}
             >
               Sign Out
             </button>
@@ -53,6 +54,61 @@ const Nav = () => {
                 className="rounded-full"
               />
             </Link>
+          </div>
+        ) : (
+          <>
+            {providers && Object.values(providers).map((provider) => (
+              <button
+                type="button"
+                key={provider.name}
+                onClick={() => signIn(provider.id)}
+                className="black_btn"
+              >
+                Sign In
+              </button>
+            ))}
+          </>
+        )}
+      </div>
+
+      {/* Mobile Navigation */}
+      <div className="sm:hidden flex relative">
+        {isUserLoggedIn ? (
+          <div className="flex">
+            <Image
+              src="/assets/images/logo.svg"
+              alt="Profile"
+              width={37}
+              height={37}
+              className="rounded-full"
+              onClick={() => setToggleDropdown((prev) => !prev)}
+            />
+
+            {toggleDropdown && (
+              <div className="dropdown">
+                <Link
+                  href="/profile"
+                  className="dropdown_link"
+                  onClick={() => setToggleDropdown(false)}
+                >
+                  My Profile
+                </Link>
+                <Link
+                  href="/create-prompt"
+                  className="dropdown_link"
+                  onClick={() => setToggleDropdown(false)}
+                >
+                  Create Prompt
+                </Link>
+                <button
+                  type="button"
+                  className="mt-5 w-full black_btn"
+                  onClick={() => signOut()}
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <>
