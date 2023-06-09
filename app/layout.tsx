@@ -1,6 +1,7 @@
 import { FC, ReactNode } from 'react'
 import '@styles/globals.css'
 import Nav from '@components/Nav'
+import Provider from '@components/Provider'
 
 interface IProps {
   children: ReactNode
@@ -15,14 +16,16 @@ const RootLayout: FC<IProps> = ({ children }) => {
   return (
     <html lang="en">
       <body>
-        <div className="main">
-          <div className="gradient"></div>
-        </div>
+        <Provider session={undefined}>
+          <div className="main">
+            <div className="gradient" />
+          </div>
 
-        <main className="app">
-          <Nav />
-          {children}
-        </main>
+          <main className="app">
+            <Nav />
+            {children}
+          </main>
+        </Provider>
       </body>
     </html>
   )

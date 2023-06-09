@@ -2,11 +2,18 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { ClientSafeProvider, LiteralUnion, getProviders, signIn, signOut } from 'next-auth/react'
+import {
+  ClientSafeProvider,
+  LiteralUnion,
+  getProviders,
+  signIn,
+  signOut,
+  useSession,
+} from 'next-auth/react'
 import { BuiltInProviderType } from "next-auth/providers"
 
 const Nav = () => {
-  const isUserLoggedIn = true
+  const { data: session } = useSession()
 
   const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
   const [toggleDropdown, setToggleDropdown] = useState(false)
@@ -34,7 +41,7 @@ const Nav = () => {
 
       {/* Desktop Navigation */}
       <div className="sm:flex hidden">
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className="flex gap-3 md:gap-5">
             <Link href="/create-prompt" className="black_btn">Create Prompt</Link>
             <button
@@ -47,7 +54,7 @@ const Nav = () => {
 
             <Link href="/profile">
               <Image
-                src="/assets/images/logo.svg"
+                src={session?.user?.image ?? '/assets/images/logo.svg'}
                 alt="Profile"
                 width={37}
                 height={37}
@@ -73,10 +80,10 @@ const Nav = () => {
 
       {/* Mobile Navigation */}
       <div className="sm:hidden flex relative">
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className="flex">
             <Image
-              src="/assets/images/logo.svg"
+              src={session?.user?.image ?? '/assets/images/logo.svg'}
               alt="Profile"
               width={37}
               height={37}
