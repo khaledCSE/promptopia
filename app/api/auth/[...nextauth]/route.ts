@@ -15,7 +15,14 @@ const handler = NextAuth({
       const sessionUser = await User.findOne({ email: session?.user?.email })
       return { ...session, user: { ...session.user, id: sessionUser._id.toString() } }
     },
-    async signIn({ account, profile, user, credentials }) {
+    async signIn(params) {
+      const { account, user, credentials } = params
+
+      // Google provider doesn't have image, it has picture
+      type GoogleProfile = (typeof params.profile & { picture?: string }) | undefined
+
+      const profile: GoogleProfile = params.profile
+
       try {
         await connectDB()
 
