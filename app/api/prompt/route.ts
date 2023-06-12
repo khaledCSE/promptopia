@@ -16,3 +16,15 @@ export const POST = async (req: Request) => {
     return new Response('Failed to Create a New Prompt', { status: 500 })
   }
 }
+
+export const GET = async (req: Request) => {
+  try {
+    await connectDB()
+    const prompts = await Prompt.find().populate('creator')
+
+    return new Response(JSON.stringify(prompts), { status: 201 })
+  } catch (err: any) {
+    console.error(err);
+    return new Response('Failed to Fetch a New Prompt', { status: 500 })
+  }
+}
