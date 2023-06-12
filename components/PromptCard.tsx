@@ -13,6 +13,15 @@ const PromptCard: FC<IProps> = (props) => {
 
   const [copied, setCopied] = useState('')
 
+  const handleCopy = () => {
+    setCopied(prompt.prompt)
+    navigator.clipboard.writeText(prompt.prompt)
+
+    setTimeout(() => {
+      setCopied('')
+    }, 3000);
+  }
+
   return (
     <div className="prompt_card">
       <div className="flex justify-between items-start gap-5">
@@ -29,7 +38,7 @@ const PromptCard: FC<IProps> = (props) => {
             <p className="font-inter text-sm text-gray-500">{prompt.creator.email}</p>
           </div>
 
-          <div className="copy_btn ml-auto" onClick={() => { }}>
+          <div className="copy_btn ml-auto" onClick={handleCopy}>
             <Image
               alt="copy icon"
               src={copied === prompt.prompt
