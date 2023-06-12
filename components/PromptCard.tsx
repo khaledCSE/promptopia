@@ -3,6 +3,8 @@
 import Image from "next/image"
 import { IPrompt } from "../types/prompt.type"
 import { FC, useState } from "react"
+import { useSession } from "next-auth/react"
+import { usePathname } from "next/navigation"
 
 interface IProps {
   prompt: IPrompt
@@ -12,6 +14,8 @@ const PromptCard: FC<IProps> = (props) => {
   const { prompt } = props
 
   const [copied, setCopied] = useState('')
+  const { data: session }: any = useSession()
+  const pathname = usePathname()
 
   const handleCopy = () => {
     setCopied(prompt.prompt)
@@ -54,6 +58,13 @@ const PromptCard: FC<IProps> = (props) => {
 
       <p className="my-4 font-satoshi text-sm text-gray-700">{prompt.prompt}</p>
       <p className="font-inter text-sm blue_gradient cursor-pointer">{prompt.tag}</p>
+
+      {session?.user?.id === prompt.creator._id && pathname === '/profile' && (
+        <div className="mt-5 flex-end gap-4 border-t border-gray-100 pt-3">
+          <p className="font-inter text-sm green_gradient cursor-pointer">Edit</p>
+          <p className="font-inter text-sm red_gradient cursor-pointer">Delete</p>
+        </div>
+      )}
     </div>
   )
 }
