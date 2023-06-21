@@ -5,13 +5,15 @@ import { IPrompt } from "../types/prompt.type"
 import { FC, useState } from "react"
 import { useSession } from "next-auth/react"
 import { usePathname } from "next/navigation"
+import Link from "next/link"
 
 interface IProps {
   prompt: IPrompt
+  handleDelete: (id: string) => Promise<void>
 }
 
 const PromptCard: FC<IProps> = (props) => {
-  const { prompt } = props
+  const { prompt, handleDelete } = props
 
   const [copied, setCopied] = useState('')
   const { data: session }: any = useSession()
@@ -57,12 +59,12 @@ const PromptCard: FC<IProps> = (props) => {
       </div>
 
       <p className="my-4 font-satoshi text-sm text-gray-700">{prompt.prompt}</p>
-      <p className="font-inter text-sm blue_gradient cursor-pointer">{prompt.tag}</p>
+      <p className="font-inter text-sm blue_gradient cursor-pointer">#{prompt.tag}</p>
 
       {session?.user?.id === prompt.creator._id && pathname === '/profile' && (
         <div className="mt-5 flex-end gap-4 border-t border-gray-100 pt-3">
-          <p className="font-inter text-sm green_gradient cursor-pointer">Edit</p>
-          <p className="font-inter text-sm red_gradient cursor-pointer">Delete</p>
+          <Link href={`/update-prompt?id=${prompt._id}`} className="font-inter text-sm green_gradient cursor-pointer">Edit</Link>
+          <p className="font-inter text-sm red_gradient cursor-pointer" onClick={() => handleDelete(prompt._id.toString())}>Delete</p>
         </div>
       )}
     </div>

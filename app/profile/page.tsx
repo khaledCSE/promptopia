@@ -19,11 +19,29 @@ const ProfilePage = () => {
     getPrompts()
   }, [session?.user])
 
+  const handleDelete = async (id: string) => {
+    const isConfirmed = confirm('Are you sure?')
+
+    if (isConfirmed) {
+      try {
+        const res = await fetch(`/api/prompt/${id}`, { method: 'DELETE' })
+
+        if (res.ok) {
+          const filtered = prompts.filter((prompt) => prompt._id !== id)
+          setPrompts(filtered)
+        }
+      } catch (err: any) {
+        console.error(err);
+      }
+    }
+  }
+
   return (
     <Profile
       name="My"
       desc="Welcome to your personalized profile page"
       prompts={prompts}
+      handleDelete={handleDelete}
     />
   )
 }

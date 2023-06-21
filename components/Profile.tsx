@@ -8,10 +8,11 @@ interface IProps {
   name: string
   desc: string
   prompts: IPrompt[]
+  handleDelete: (id: string) => Promise<void>
 }
 
 const Profile: FC<IProps> = (props) => {
-  const { name, desc, prompts } = props
+  const { name, desc, prompts, handleDelete } = props
 
   return (
     <section className="w-full">
@@ -22,7 +23,7 @@ const Profile: FC<IProps> = (props) => {
       <p className="desc text-left">{desc}</p>
 
       <div className="mt-10 prompt_layout">
-        {prompts.map((prompt) => (<PromptCard key={prompt._id} prompt={prompt} />))}
+        {prompts.map((prompt) => (<PromptCard key={prompt._id} prompt={prompt} handleDelete={handleDelete} />))}
       </div>
     </section>
   )
