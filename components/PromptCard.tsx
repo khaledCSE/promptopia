@@ -9,7 +9,7 @@ import Link from "next/link"
 
 interface IProps {
   prompt: IPrompt
-  handleDelete: (id: string) => Promise<void>
+  handleDelete?: (id: string) => Promise<void>
 }
 
 const PromptCard: FC<IProps> = (props) => {
@@ -64,7 +64,7 @@ const PromptCard: FC<IProps> = (props) => {
       {session?.user?.id === prompt.creator._id && pathname === '/profile' && (
         <div className="mt-5 flex-end gap-4 border-t border-gray-100 pt-3">
           <Link href={`/update-prompt?id=${prompt._id}`} className="font-inter text-sm green_gradient cursor-pointer">Edit</Link>
-          <p className="font-inter text-sm red_gradient cursor-pointer" onClick={() => handleDelete(prompt._id.toString())}>Delete</p>
+          <p className="font-inter text-sm red_gradient cursor-pointer" onClick={() => handleDelete?.(prompt._id.toString())}>Delete</p>
         </div>
       )}
     </div>
